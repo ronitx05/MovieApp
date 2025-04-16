@@ -1,33 +1,78 @@
 package org.ncu.movie_app.entities;
 
 import jakarta.persistence.*;
-import java.util.Date;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
-@Table
+@Table(name = "bookings")
 public class Booking {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    int bookingId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "booking_id")
+    private int bookingId;
 
-    @Column(name="booking_date", nullable=false)
-    Date bookingDate;
+    @Column(name = "booking_time")
+    private LocalDateTime bookingTime;
 
-    @Column(name = "booking_price", nullable=false)
-    int bookingPrice;
+    @Column(name = "total_amount")
+    private BigDecimal totalAmount;
 
-    @Column(name = "customer_name", nullable=false, length=20)
-    String customerName;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "seat_id")
+    private Seat seat;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "movie_id")
+    private Movie movie;
+
+    // Constructors, getters, setters
     public Booking() {}
 
-    public Booking(String customerName, int bookingPrice, Date bookingDate, int bookingId) {
-        this.customerName = customerName;
-        this.bookingPrice = bookingPrice;
-        this.bookingDate = bookingDate;
+    public Booking(LocalDateTime bookingTime, BigDecimal totalAmount) {
+        this.bookingTime = bookingTime;
+        this.totalAmount = totalAmount;
+    }
+
+    // Getters and setters
+    public int getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(int bookingId) {
         this.bookingId = bookingId;
     }
 
-    // Getters and Setters (omitted for brevity)
-    // toString() method (omitted)
+    public LocalDateTime getBookingTime() {
+        return bookingTime;
+    }
+
+    public void setBookingTime(LocalDateTime bookingTime) {
+        this.bookingTime = bookingTime;
+    }
+
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public Seat getSeat() {
+        return seat;
+    }
+
+    public void setSeat(Seat seat) {
+        this.seat = seat;
+    }
+
+    public Movie getMovie() {
+        return movie;
+    }
+
+    public void setMovie(Movie movie) {
+        this.movie = movie;
+    }
 }

@@ -1,10 +1,15 @@
 package org.ncu.movie_app.services;
 
 import org.ncu.movie_app.entities.Booking;
+import org.ncu.movie_app.entities.Seat;
+
+import java.util.List;
 
 public interface BookingService {
-    void insertBooking(Booking booking);
-    Booking updateBooking(int id, Booking booking);
-    Booking deleteBookingById(int id);
+    void saveBooking(Booking booking);
     Booking getBookingById(int id);
+    List<Booking> getAllBookings();
+    void updateBooking(Booking booking);
+    void deleteBooking(int id);
+    void createBookingWithSeat(Booking booking, Seat seat);
 }

@@ -1,26 +1,39 @@
 package org.ncu.movie_app.repositories;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.ncu.movie_app.entities.Booking;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import java.util.List;
 
 @Repository
+@Transactional
 public class BookingRepository {
-    @Autowired
-    private SessionFactory sessionFactory;
 
-    public void createBooking(Booking booking) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            session.persist(booking);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            throw e;
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public void saveBooking(Booking booking) {
+        entityManager.persist(booking);
+    }
+
+    public Booking getBookingById(int id) {
+        return entityManager.find(Booking.class, id);
+    }
+
+    public List<Booking> getAllBookings() {
+        return entityManager.createQuery("SELECT b FROM Booking b", Booking.class).getResultList();
+    }
+
+    public void updateBooking(Booking booking) {
+        entityManager.merge(booking);
+    }
+
+    public void deleteBooking(int id) {
+        Booking booking = entityManager.find(Booking.class, id);
+        if (booking != null) {
+            entityManager.remove(booking);
         }
     }
 }

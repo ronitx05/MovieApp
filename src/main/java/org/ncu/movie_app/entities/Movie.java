@@ -2,6 +2,8 @@ package org.ncu.movie_app.entities;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "movies")
@@ -23,6 +25,14 @@ public class Movie {
 
     @Column(name = "movie_price")
     private BigDecimal moviePrice;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "movie_genre",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
+    private List<Genre> genres = new ArrayList<>();
 
     public int getMovieId() {
         return movieId;
@@ -62,6 +72,24 @@ public class Movie {
 
     public void setMoviePrice(BigDecimal moviePrice) {
         this.moviePrice = moviePrice;
+    }
+
+    public List<Genre> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(List<Genre> genres) {
+        this.genres = genres;
+    }
+
+    public void addGenre(Genre genre) {
+        genres.add(genre);
+        genre.getMovies().add(this);
+    }
+
+    public void removeGenre(Genre genre) {
+        genres.remove(genre);
+        genre.getMovies().remove(this);
     }
 
     @Override
