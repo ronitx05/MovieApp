@@ -4,8 +4,11 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
+import org.ncu.movie_app.entities.Genre;
 import org.ncu.movie_app.entities.Movie;
 import org.springframework.stereotype.Repository;
+
+import java.util.HashSet;
 import java.util.List;
 
 @Repository
@@ -43,6 +46,14 @@ public class MovieRepository {
     @Transactional
     public void deleteMovieById(int id) {
         Movie movie = entityManager.find(Movie.class, id);
-        if (movie != null) entityManager.remove(movie);
+        if (movie != null) {
+
+            for (Genre genre : new HashSet<>(movie.getGenres())) {
+                genre.getMovies().remove(movie);
+            }
+            movie.getGenres().clear();
+
+            entityManager.remove(movie);
+        }
     }
 }

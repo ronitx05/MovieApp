@@ -1,5 +1,7 @@
 package org.ncu.movie_app.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -26,13 +28,24 @@ public class Movie {
     @Column(name = "movie_price")
     private BigDecimal moviePrice;
 
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore // Prevents infinite loop in JSON
+    private List<Booking> bookings = new ArrayList<>();
+
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "movie_genre",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id")
     )
+
+    @JsonManagedReference("movie-genre")
     private List<Genre> genres = new ArrayList<>();
+
+    public void addBooking(Booking booking) {
+        bookings.add(booking);
+        booking.setMovie(this);
+    }
 
     public int getMovieId() {
         return movieId;

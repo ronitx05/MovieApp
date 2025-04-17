@@ -1,5 +1,6 @@
 package org.ncu.movie_app.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -25,6 +26,7 @@ public class Booking {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id")
+    @JsonBackReference("movie-bookings")
     private Movie movie;
 
     // Constructors, getters, setters

@@ -1,13 +1,18 @@
 package org.ncu.movie_app.controllers;
 
 import org.ncu.movie_app.entities.Booking;
+import org.ncu.movie_app.entities.Movie;
 import org.ncu.movie_app.entities.Seat;
 import org.ncu.movie_app.services.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/bookings")
@@ -22,8 +27,24 @@ public class BookingController {
         return ResponseEntity.ok("Booking created successfully");
     }
 
-    @PostMapping("/with-seat")
-    public ResponseEntity<String> createBookingWithSeat(@RequestBody Booking booking, @RequestBody Seat seat) {
+    @PostMapping(value = "/with-seat", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> createBookingWithSeat(@RequestBody Map<String, Object> request) {
+        Map<String, Object> bookingMap = (Map<String, Object>) request.get("booking");
+        Map<String, Object> seatMap = (Map<String, Object>) request.get("seat");
+        Map<String, Object> movieMap = (Map<String, Object>) bookingMap.get("movie");
+
+        Movie movie = new Movie();
+        movie.setMovieId(Integer.parseInt(movieMap.get("movieId").toString()));
+
+        Seat seat = new Seat();
+        seat.setSeatNumber(seatMap.get("seatNumber").toString());
+        seat.setSeatType(seatMap.get("seatType").toString());
+
+        Booking booking = new Booking();
+        booking.setBookingTime(LocalDateTime.parse(bookingMap.get("bookingTime").toString()));
+        booking.setTotalAmount(new BigDecimal(bookingMap.get("totalAmount").toString()));
+        booking.setMovie(movie);
+
         bookingService.createBookingWithSeat(booking, seat);
         return ResponseEntity.ok("Booking with seat created successfully");
     }

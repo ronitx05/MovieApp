@@ -3,10 +3,12 @@ package org.ncu.movie_app.controllers;
 import org.ncu.movie_app.entities.Genre;
 import org.ncu.movie_app.services.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/genres")
@@ -15,8 +17,10 @@ public class GenreController {
     @Autowired
     private GenreService genreService;
 
-    @PostMapping
-    public ResponseEntity<String> createGenre(@RequestBody Genre genre) {
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> createGenre(@RequestBody Map<String, String> request) {
+        Genre genre = new Genre();
+        genre.setGenreName(request.get("genreName"));
         genreService.saveGenre(genre);
         return ResponseEntity.ok("Genre created successfully");
     }
