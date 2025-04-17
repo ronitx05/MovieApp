@@ -1,5 +1,8 @@
 package org.ncu.movie_app.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,6 +20,7 @@ public class Seat {
     private String seatType;
 
     @OneToOne(mappedBy = "seat")
+    @JsonIgnore
     private Booking booking;
 
     // Constructors, getters, setters
