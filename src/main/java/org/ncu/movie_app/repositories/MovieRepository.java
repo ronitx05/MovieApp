@@ -7,7 +7,6 @@ import jakarta.transaction.Transactional;
 import org.ncu.movie_app.entities.Genre;
 import org.ncu.movie_app.entities.Movie;
 import org.springframework.stereotype.Repository;
-
 import java.util.HashSet;
 import java.util.List;
 

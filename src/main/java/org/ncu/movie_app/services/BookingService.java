@@ -2,7 +2,6 @@ package org.ncu.movie_app.services;
 
 import org.ncu.movie_app.entities.Booking;
 import org.ncu.movie_app.entities.Seat;
-
 import java.util.List;
 
 public interface BookingService {
