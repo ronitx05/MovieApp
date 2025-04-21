@@ -8,6 +8,6 @@ public interface GenreService {
     Genre getGenreById(int id);
     List<Genre> getAllGenres();
     void updateGenre(Genre genre);
-    void deleteGenre(int id);
+//    void deleteGenre(int id);
     void addMovieToGenre(int genreId, int movieId);
 }

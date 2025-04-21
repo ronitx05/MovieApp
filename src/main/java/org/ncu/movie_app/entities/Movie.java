@@ -32,7 +32,7 @@ public class Movie {
     @JsonIgnore // Prevents infinite loop in JSON
     private List<Booking> bookings = new ArrayList<>();
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name = "movie_genre",
             joinColumns = @JoinColumn(name = "movie_id"),

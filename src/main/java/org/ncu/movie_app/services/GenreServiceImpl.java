@@ -40,11 +40,11 @@ public class GenreServiceImpl implements GenreService {
         genreRepository.updateGenre(genre);
     }
 
-    @Override
-    @Transactional
-    public void deleteGenre(int id) {
-        genreRepository.deleteGenre(id);
-    }
+//    @Override
+//    @Transactional
+//    public void deleteGenre(int id) {
+//        genreRepository.deleteGenre(id);
+//    }
 
     @Override
     @Transactional

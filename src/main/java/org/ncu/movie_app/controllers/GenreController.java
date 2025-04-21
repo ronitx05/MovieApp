@@ -42,11 +42,11 @@ public class GenreController {
         return ResponseEntity.ok("Genre updated successfully");
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteGenre(@PathVariable int id) {
-        genreService.deleteGenre(id);
-        return ResponseEntity.ok("Genre deleted successfully");
-    }
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<String> deleteGenre(@PathVariable int id) {
+//        genreService.deleteGenre(id);
+//        return ResponseEntity.ok("Genre deleted successfully");
+//    }
 
     @PostMapping("/{genreId}/movies/{movieId}")
     public ResponseEntity<String> addMovieToGenre(@PathVariable int genreId, @PathVariable int movieId) {

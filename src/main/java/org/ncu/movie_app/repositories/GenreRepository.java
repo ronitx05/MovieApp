@@ -31,14 +31,14 @@ public class GenreRepository {
         entityManager.merge(genre);
     }
 
-    public void deleteGenre(int id) {
-        Genre genre = entityManager.find(Genre.class, id);
-        if (genre != null) {
-            // Remove associations first
-            for (Movie movie : genre.getMovies()) {
-                movie.getGenres().remove(genre);
-            }
-            entityManager.remove(genre);
-        }
-    }
+//    public void deleteGenre(int id) {
+//        Genre genre = entityManager.find(Genre.class, id);
+//        if (genre != null) {
+//            // Remove associations first
+//            for (Movie movie : genre.getMovies()) {
+//                movie.getGenres().remove(genre);
+//            }
+//            entityManager.remove(genre);
+//        }
+//    }
 }

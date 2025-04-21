@@ -1,12 +1,15 @@
 package org.ncu.movie_app.controllers;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import org.ncu.movie_app.entities.Genre;
 import org.ncu.movie_app.entities.Movie;
 import org.ncu.movie_app.services.GenreService;
 import org.ncu.movie_app.services.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,13 +33,39 @@ public class MovieController {
         return movieService.getMovieById(id);
     }
 
-    @PostMapping("/addmoviePS")
-    public ResponseEntity<String> addMovieSpecial(@RequestBody Movie movie) {
-        movieService.saveMovie(movie);
-        return ResponseEntity.ok("Movie added via special endpoint");
+    @PostMapping(value = "/addmoviePS", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> addMovieSpecial(@RequestBody Map<String, Object> requestMap) {
+        try {
+            // Parse basic movie info
+            Movie movie = new Movie();
+            movie.setMovieName((String) requestMap.get("movieName"));
+            movie.setMovieDesc((String) requestMap.get("movieDesc"));
+            movie.setMovieRating(Double.parseDouble(requestMap.get("movieRating").toString()));
+            movie.setMoviePrice(new BigDecimal(requestMap.get("moviePrice").toString()));
+
+            // Handle genres
+            List<Map<String, Object>> genresList = (List<Map<String, Object>>) requestMap.get("genres");
+            if (genresList != null) {
+                for (Map<String, Object> genreMap : genresList) {
+                    Integer genreId = Integer.parseInt(genreMap.get("genreId").toString());
+                    // Get managed genre entity from database
+                    Genre genre = genreService.getGenreById(genreId);
+                    if (genre != null) {
+                        movie.getGenres().add(genre);
+                        genre.getMovies().add(movie); // Maintain bidirectional relationship
+                    }
+                }
+            }
+
+            movieService.saveMovie(movie);
+            return ResponseEntity.ok("Movie added via special endpoint");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void updateMovie(@PathVariable int id, @RequestBody Movie movie) {
         movie.setMovieId(id);
         movieService.updateMovieByID(id, movie);
