@@ -66,8 +66,8 @@ public class CustomerProfileController {
     @GetMapping("/paginated")
     public Page<CustomerProfile> getPaginatedCustomers(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "fullName") String sortBy
+            @RequestParam(defaultValue = "1") int size,
+            @RequestParam(defaultValue = "name") String sortBy
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
         return service.getPaginatedCustomers(pageable);

@@ -34,25 +34,23 @@ public class MovieController {
     }
 
     @PostMapping(value = "/addmoviePS", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> addMovieSpecial(@RequestBody Map<String, Object> requestMap) {
+    public ResponseEntity<String> addMovie(@RequestBody Map<String, Object> requestMap) {
         try {
-            // Parse basic movie info
+
             Movie movie = new Movie();
             movie.setMovieName((String) requestMap.get("movieName"));
             movie.setMovieDesc((String) requestMap.get("movieDesc"));
             movie.setMovieRating(Double.parseDouble(requestMap.get("movieRating").toString()));
             movie.setMoviePrice(new BigDecimal(requestMap.get("moviePrice").toString()));
 
-            // Handle genres
             List<Map<String, Object>> genresList = (List<Map<String, Object>>) requestMap.get("genres");
             if (genresList != null) {
                 for (Map<String, Object> genreMap : genresList) {
                     Integer genreId = Integer.parseInt(genreMap.get("genreId").toString());
-                    // Get managed genre entity from database
                     Genre genre = genreService.getGenreById(genreId);
                     if (genre != null) {
                         movie.getGenres().add(genre);
-                        genre.getMovies().add(movie); // Maintain bidirectional relationship
+                        genre.getMovies().add(movie);
                     }
                 }
             }
